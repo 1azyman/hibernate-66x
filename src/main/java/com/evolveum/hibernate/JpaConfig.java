@@ -21,8 +21,6 @@ public class JpaConfig {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         bean.setJpaVendorAdapter(vendorAdapter);
 
-        // While dataSource == dataSourceFactory.getDataSource(), we're using dataSource as
-        // parameter to assure, that Spring already called the factory method. Explicit is good.
         bean.setDataSource(dataSource);
 
         Properties props = new Properties();

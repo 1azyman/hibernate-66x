@@ -25,6 +25,8 @@ public class RObject implements EntityState {
 
     private Set<RAssignment> assignments;
 
+    // more fields, omitted for brevity
+
     @Id
     @GeneratedValue(generator = "ObjectOidGenerator")
     @GenericGenerator(name = "ObjectOidGenerator", strategy = "com.evolveum.hibernate.util.ObjectOidGenerator")
@@ -57,7 +59,7 @@ public class RObject implements EntityState {
         this.oid = oid;
     }
 
-
+    @Transient
     @Override
     public Boolean isTransient() {
         return trans;

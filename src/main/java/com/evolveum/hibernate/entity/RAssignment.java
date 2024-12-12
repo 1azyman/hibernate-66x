@@ -17,6 +17,7 @@ public class RAssignment {
 
     private RAssignmentExtension extension;
 
+    // there are multiple fields instead of this placeholder value
     private String someValue;
 
     @JoinColumn(name = "owner_oid", referencedColumnName = "oid", foreignKey = @ForeignKey(name = "fk_assignment_owner"))

@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.UUID;
 
 @SpringBootTest
-class Hibernate66xApplicationTests {
+class AssertionErrorTest {
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -22,6 +22,7 @@ class Hibernate66xApplicationTests {
         String name = "first";
         String assignmentValue = "some value";
 
+        // first operation, add user
 
         RUser user = createUser(oid, name, assignmentValue);
         user.setTransient(true);
@@ -31,6 +32,8 @@ class Hibernate66xApplicationTests {
         em.persist(user);
         em.getTransaction().commit();
         em.close();
+
+        // second operation, happens sometime later
 
         RUser other = createUser(oid, "second", "some value");
 

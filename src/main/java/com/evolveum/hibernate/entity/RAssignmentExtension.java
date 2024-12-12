@@ -5,8 +5,6 @@ import com.evolveum.hibernate.util.EntityState;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @IdClass(RAssignmentExtensionId.class)
@@ -19,7 +17,8 @@ public class RAssignmentExtension implements Serializable, EntityState {
     private String ownerOid;
     private Integer ownerId;
 
-    private Set<RAExtString> strings;
+    // there are multiple fields instead of this placeholder value (eg. Set)
+    private String value;
 
     @Transient
     @Override
@@ -63,20 +62,16 @@ public class RAssignmentExtension implements Serializable, EntityState {
         return ownerId;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = RAExtValue.ANY_CONTAINER, orphanRemoval = true, cascade = CascadeType.ALL)
-    public Set<RAExtString> getStrings() {
-        if (strings == null) {
-            strings = new HashSet<>();
-        }
-        return strings;
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public void setOwnerOid(String ownerOid) {
         this.ownerOid = ownerOid;
-    }
-
-    public void setStrings(Set<RAExtString> strings) {
-        this.strings = strings;
     }
 
     public void setOwner(RAssignment owner) {
@@ -96,12 +91,6 @@ public class RAssignmentExtension implements Serializable, EntityState {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        RAssignmentExtension that = (RAssignmentExtension) o;
-
-        if (strings != null ? !strings.equals(that.strings) : that.strings != null) {
             return false;
         }
 
