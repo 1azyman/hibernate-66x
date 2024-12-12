@@ -4,6 +4,7 @@ import com.evolveum.hibernate.entity.RAssignment;
 import com.evolveum.hibernate.entity.RUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +19,9 @@ class AssertionErrorTest {
 
     @Test
     void testMergeAssertionError() {
-        String oid = UUID.randomUUID().toString();
-        String name = "first";
-        String assignmentValue = "some value";
+        final String oid = UUID.randomUUID().toString();
+        final String name = "first";
+        final String assignmentValue = "some value";
 
         // first operation, add user
 
@@ -33,15 +34,38 @@ class AssertionErrorTest {
         em.getTransaction().commit();
         em.close();
 
+        RUser added = getUser(oid);
+        assertUser(added, name, assignmentValue);
+
         // second operation, happens sometime later
 
-        RUser other = createUser(oid, "second", "some value");
+        final String newName = "second";
+        RUser other = createUser(oid, newName, "some value");
 
         em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
         em.merge(other);
         em.getTransaction().commit();
         em.close();
+
+        RUser merged = getUser(oid);
+        assertUser(merged, newName, assignmentValue);
+    }
+
+    private void assertUser(RUser user, String name, String assignmentValue) {
+        Assertions.assertEquals(name, user.getName());
+        Assertions.assertEquals(assignmentValue, user.getAssignments().iterator().next().getSomeValue());
+        Assertions.assertEquals(1, user.getAssignments().size());
+        Assertions.assertNull(user.getAssignments().iterator().next().getExtension());
+    }
+
+    private RUser getUser(String oid) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+        RUser user = em.find(RUser.class, oid);
+        em.getTransaction().commit();
+
+        return user;
     }
 
     private RUser createUser(String oid, String name, String assignmentValue) {
