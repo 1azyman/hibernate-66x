@@ -44,6 +44,9 @@ public class RAssignmentExtension implements Serializable, EntityState {
         return owner;
     }
 
+    /*
+     * oid is taken from owner object (RAssignment)
+     */
     @Id
     @Column(name = "owner_owner_oid", length = Constants.COLUMN_LENGTH_OID)
     public String getOwnerOid() {

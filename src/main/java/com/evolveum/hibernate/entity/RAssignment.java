@@ -27,6 +27,9 @@ public class RAssignment {
         return owner;
     }
 
+    /*
+     * oid is taken from owner object (RObject)
+     */
     @Id
     @Column(name = "owner_oid", length = Constants.COLUMN_LENGTH_OID, nullable = false)
     public String getOwnerOid() {
